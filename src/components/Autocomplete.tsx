@@ -92,6 +92,42 @@ function AutoComplete({ data }: AutoCompleteProps) {
     };
   }, []);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const abortController = new AbortController();
+
+  //     try {
+  //       const response = await fetch("https://rickandmortyapi.com/api/character", {
+  //         signal: abortController.signal, // Pass the signal to the fetch request
+  //       });
+
+  //       if (!response.ok) {
+  //         throw new Error("Network response was not ok");
+  //       }
+
+  //       const data = await response.json();
+  //       const characterNames = data.results.map((character) => character.name);
+  //       setFilteredData(characterNames);
+  //     } catch (error) {
+  //       if (error.name === "AbortError") {
+  //         console.log("Fetch aborted");
+  //       } else {
+  //         console.error("Error fetching data:", error);
+  //       }
+  //     }
+  //   };
+
+  //   if (inputValue) {
+  //     fetchData();
+  //   } else {
+  //     setFilteredData([]); // Clear the list when input is empty
+  //   }
+
+  //   return () => {
+  //     abortController.abort(); // Abort the fetch when the component unmounts
+  //   };
+  // }, [inputValue]);
+
   const highlightMatch = (text: string) => {
     // Extract the current input value and convert both text and input value to lowercase.
     const { inputValue } = state;

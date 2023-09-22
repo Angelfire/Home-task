@@ -1,0 +1,31 @@
+/* AutoComplete.css */
+.auto-complete {
+  position: relative;
+  width: 500px;
+}
+  
+input[type="text"] {
+  width: 500px;
+  padding: 8px;
+}
+  
+.auto-complete-results {
+  position: absolute;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  width: 518px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+  
+.auto-complete-results li {
+  padding: 8px;
+  cursor: pointer;
+}
+  
+.auto-complete-results li.selected {
+  background-color: #f0f0f0;
+}

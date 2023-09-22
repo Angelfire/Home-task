@@ -29,3 +29,9 @@ input[type="text"] {
 .auto-complete-results li.selected {
   background-color: #f0f0f0;
 }
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}

@@ -1,6 +1,7 @@
 import { useState, useEffect, ChangeEvent, useRef } from "react";
 
 import "./Autocomplete.css";
+
 interface AutoCompleteProps {
   data: string[];
 }
@@ -10,6 +11,7 @@ interface AutoCompleteState {
   filteredData: string[];
   isOpen: boolean;
   selectedItemIndex: number;
+  error: string | null;
 }
 
 function AutoComplete({ data }: AutoCompleteProps) {
@@ -18,6 +20,7 @@ function AutoComplete({ data }: AutoCompleteProps) {
     filteredData: [],
     isOpen: true,
     selectedItemIndex: -1,
+    error: null,
   });
 
   const autoCompleteRef = useRef<HTMLDivElement | null>(null);
@@ -35,14 +38,28 @@ function AutoComplete({ data }: AutoCompleteProps) {
 
   const handleInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
-    const filteredData = await filterData(inputValue);
 
-    setState({
-      inputValue,
-      filteredData,
-      isOpen: true,
-      selectedItemIndex: -1,
-    });
+    // Regular expression to allow only letters (A-Z, a-z)
+    const letterRegex = /^[A-Za-z]+$/;
+
+    if (inputValue === "" || letterRegex.test(inputValue)) {
+      // If the input is empty or contains only letters, update the state
+      const filteredData = await filterData(inputValue);
+
+      setState({
+        inputValue,
+        filteredData,
+        isOpen: true,
+        selectedItemIndex: -1,
+        error: null, // Clear any previous error
+      });
+    } else {
+      // If the input contains other characters, set an error message
+      setState({
+        ...state,
+        error: "Please enter only letters.",
+      });
+    }
   };
 
   const handleItemSelect = (selectedItem: string) => {
@@ -67,44 +84,6 @@ function AutoComplete({ data }: AutoCompleteProps) {
     }
   };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const abortController = new AbortController();
-
-  //     try {
-  //       const response = await fetch("https://rickandmortyapi.com/api/character", {
-  //         signal: abortController.signal, // Pass the signal to the fetch request
-  //       });
-
-  //       if (!response.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-
-  //       const data = await response.json();
-  //       const characterNames = data.results.map((character) => character.name);
-  //       setFilteredData(characterNames);
-  //     } catch (error) {
-  //       if (error.name === "AbortError") {
-  //         console.log("Fetch aborted");
-  //       } else {
-  //         console.error("Error fetching data:", error);
-  //       }
-  //     }
-  //   };
-
-  //   if (inputValue) {
-  //     fetchData();
-  //   } else {
-  //     setFilteredData([]); // Clear the list when input is empty
-  //   }
-
-  //   return () => {
-  //     abortController.abort(); // Abort the fetch when the component unmounts
-  //   };
-  // }, [inputValue]);
-
-  // This useEffect handles adding and removing a click event listener
-  // to detect clicks outside the AutoComplete component.
   useEffect(() => {
     // Add a mousedown event listener to the entire document.
     document.addEventListener("mousedown", handleOutsideClick);
@@ -124,6 +103,8 @@ function AutoComplete({ data }: AutoCompleteProps) {
         onChange={handleInputChange}
         placeholder="Search..."
       />
+      {state.error && <p className="error">{state.error}</p>}{" "}
+      {/* Display error message */}
       {state.isOpen && (
         <ul className="auto-complete-results">
           {state.filteredData.map((item, index) => (

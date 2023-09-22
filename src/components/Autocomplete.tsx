@@ -1,7 +1,6 @@
 import { useState, useEffect, ChangeEvent, useRef } from "react";
 
 import "./Autocomplete.css";
-
 interface AutoCompleteProps {
   data: string[];
 }

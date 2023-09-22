@@ -40,6 +40,8 @@ function MyComponent() {
 ## What is a fragment and why do we need it? Give an example where it might break my app.
 Fragments in React let you group multiple elements without introducing an extra HTML element. They come in handy when you need to structure JSX without adding an unnecessary container element.
 
+_pending example_
+
 ## Give 3 examples of the HOC pattern.
 Higher Order Components are patterns in React for adding functionality to components.
 
@@ -48,6 +50,8 @@ Higher Order Components are patterns in React for adding functionality to compon
 - Styling HOC that applies CSS based on conditions
 
 ## What's the difference in handling exceptions in promises, callbacks and async… Await?
+
+Handling exceptions in Promises, callbacks, and async-await differs in terms of syntax and approach, but the underlying concept of error handling remains consistent. 
 
 - Promises: Errors in Promises are caught using .catch() or .then(null, rejectionHandler).
 - Callbacks: Errors in callbacks are typically checked by looking at the error argument.

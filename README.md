@@ -7,3 +7,5 @@ Auto-complete component using React + TypeScript.
 - `npm install`
 - `npm run dev`
 
+## Deel questions
+[Questions](questions.md)

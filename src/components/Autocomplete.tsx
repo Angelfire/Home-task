@@ -5,7 +5,6 @@ import "./Autocomplete.css";
 interface AutoCompleteProps {
   data: string[];
 }
-
 interface AutoCompleteState {
   inputValue: string;
   filteredData: string[];
@@ -39,7 +38,6 @@ function AutoComplete({ data }: AutoCompleteProps) {
   const handleInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
 
-    // Regular expression to allow only letters (A-Z, a-z)
     const letterRegex = /^[A-Za-z]+$/;
 
     if (inputValue === "" || letterRegex.test(inputValue)) {
@@ -51,10 +49,9 @@ function AutoComplete({ data }: AutoCompleteProps) {
         filteredData,
         isOpen: true,
         selectedItemIndex: -1,
-        error: null, // Clear any previous error
+        error: null,
       });
     } else {
-      // If the input contains other characters, set an error message
       setState({
         ...state,
         error: "Please enter only letters.",
@@ -95,6 +92,37 @@ function AutoComplete({ data }: AutoCompleteProps) {
     };
   }, []);
 
+  const highlightMatch = (text: string) => {
+    // Extract the current input value and convert both text and input value to lowercase.
+    const { inputValue } = state;
+    const lowerText = text.toLowerCase();
+    const lowerInputValue = inputValue.toLowerCase();
+
+    // Find the starting index of the matching part in the lowercase text.
+    const startIndex = lowerText.indexOf(lowerInputValue);
+
+    if (startIndex !== -1) {
+      // Split the text into three parts: before the match, the matched text, and after the match.
+      const beforeMatch = text.slice(0, startIndex);
+      const matchedText = text.slice(
+        startIndex,
+        startIndex + inputValue.length
+      );
+      const afterMatch = text.slice(startIndex + inputValue.length);
+
+      return (
+        <>
+          {beforeMatch}
+          <span className="highlight">{matchedText}</span>
+          {afterMatch}
+        </>
+      );
+    }
+
+    // If no match found, return the original text.
+    return text;
+  };
+
   return (
     <div className="auto-complete" ref={autoCompleteRef}>
       <input
@@ -103,8 +131,7 @@ function AutoComplete({ data }: AutoCompleteProps) {
         onChange={handleInputChange}
         placeholder="Search..."
       />
-      {state.error && <p className="error">{state.error}</p>}{" "}
-      {/* Display error message */}
+      {state.error && <p className="error">{state.error}</p>}
       {state.isOpen && (
         <ul className="auto-complete-results">
           {state.filteredData.map((item, index) => (
@@ -113,7 +140,7 @@ function AutoComplete({ data }: AutoCompleteProps) {
               className={index === state.selectedItemIndex ? "selected" : ""}
               onClick={() => handleItemSelect(item)}
             >
-              {item}
+              {highlightMatch(item)}
             </li>
           ))}
         </ul>

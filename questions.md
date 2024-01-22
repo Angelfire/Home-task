@@ -1,4 +1,4 @@
-# Deel FE Questions
+# FE Questions
 
 ## What is the difference between Component and PureComponent? Give an example where it might break my app.
 In React, Components update whenever something changes, while PureComponent updates only if there's a real change in the data. For instance, if you have a list of items, using Components can lead to unnecessary updates when the parent changes, even if the item itself remains the same. PureComponent helps avoid this.
